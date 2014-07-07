@@ -9,6 +9,7 @@
 # * Installs curl if we're using the download script
 # * If we're running on a Debian system, install kernel headers and build tools
 # * On a Red Hat system and we really want to install kernel headers, do it.
+# * Purges VMware Tools OSP packages
 #
 # === Authors:
 #
@@ -21,8 +22,8 @@
 #
 class vmwaretools::install::package {
 
-  package { ['open-vm-tools','open-vm-dkms']:
-    ensure => purged,
+  package { ['open-vm-tools','open-vm-dkms', 'vmware-tools-services']:
+    ensure => absent,
   }
 
   if !defined(Package['perl']) {
@@ -31,7 +32,7 @@ class vmwaretools::install::package {
     }
   }
 
-  if $vmwaretools::archive_url != 'puppet' {
+  if $vmwaretools::download_vmwaretools == true {
     if !defined(Package['curl']) {
       package { 'curl':
         ensure => present,
@@ -42,15 +43,28 @@ class vmwaretools::install::package {
   case $::osfamily {
 
     'Debian' : {
-      if ! defined(Package['build-essential']) {
-        package{'build-essential':
-          ensure => present,
+      case $::operatingsystem {
+        'Ubuntu' : {
+          if ! defined(Package['build-essential']) {
+            package{'build-essential':
+              ensure => present,
+            }
+          }
+          if ! defined(Package["linux-headers-${::kernelrelease}"]) {
+            package{"linux-headers-${::kernelrelease}":
+              ensure => present,
+            }
+          }
         }
-      }
-      if ! defined(Package["linux-headers-${::kernelrelease}"]) {
-        package{"linux-headers-${::kernelrelease}":
-          ensure => present,
+        'Debian' : {
+          if ! defined(Package["linux-headers-${::kernelrelease}"]) {
+            package{"linux-headers-${::kernelrelease}":
+              ensure => present,
+            }
+          }
         }
+
+        default : { fail "${::operatingsystem} not supported yet." }
       }
     }
 

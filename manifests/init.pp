@@ -57,7 +57,7 @@
 #
 # * Compares installed version with the configured version
 # * Transfer the VMware Tools archive to the target agent (via Puppet or HTTP)
-# * Untar the archive and run vmware-install-tools.pl
+# * Untar the archive, run vmware-install-tools.pl
 # * Removes open-vm-tools
 #
 # === Requires:
@@ -100,25 +100,40 @@ class vmwaretools (
   $timesync             = undef,
 ) {
 
-  if $archive_url != 'puppet' and $archive_md5 == '' {
-    fail 'MD5 not given for VMware Tools installer package'
-  }
+  # Puppet Lint gotcha -- facts are returned as strings, so we should ignore
+  # the quoted-boolean warning here. Related links below:
+  # https://tickets.puppetlabs.com/browse/FACT-151
+  # https://projects.puppetlabs.com/issues/3704
 
-  if $::virtual != 'vmware' and $fail_on_non_vmware == true {
+  if $::is_virtual == 'true' and $::virtual == 'vmware' {
+
+    if $::vmwaretools_version == undef {
+      fail 'vmwaretools_version fact not present, please check your pluginsync configuraton.'
+    }
+
+    if (($archive_url == 'puppet') or ('puppet://' in $archive_url)) {
+      $download_vmwaretools = false
+    } else {
+      $download_vmwaretools = true
+    }
+
+    if (($download_vmwaretools == true) and ($archive_md5 == '')) {
+      fail 'MD5 not given for VMware Tools installer package'
+    }
+
+    if $::lsbdistcodename == 'raring' {
+      fail 'Ubuntu 13.04 is not supported by this module'
+    }
+
+    include vmwaretools::params
+    include vmwaretools::install
+    include vmwaretools::config
+    include vmwaretools::config_tools
+
+    if $timesync != undef {
+      include vmwaretools::timesync
+    }
+  } elsif $fail_on_non_vmware == true {
     fail 'Not a VMware platform.'
   }
-
-  if $::lsbdistcodename == 'raring' {
-    fail 'Ubuntu 13.04 is not supported by this module'
-  }
-
-  include vmwaretools::params
-  include vmwaretools::install
-  include vmwaretools::config
-  include vmwaretools::config_tools
-
-  if $timesync != undef {
-    include vmwaretools::timesync
-  }
-
 }

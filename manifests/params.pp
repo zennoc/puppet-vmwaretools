@@ -44,8 +44,6 @@ class vmwaretools::params {
     }
   }
 
-  $config_creates = "/lib/modules/${::kernelrelease}/misc/vmci.ko"
-
   $awk_path = $::osfamily ? {
     'RedHat' => '/bin/awk',
     'Debian' => '/usr/bin/awk',

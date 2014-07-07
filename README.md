@@ -2,6 +2,12 @@
 
 [![Build Status](https://secure.travis-ci.org/craigwatson/puppet-vmwaretools.png?branch=master)](http://travis-ci.org/craigwatson/puppet-vmwaretools)
 
+###Wanted: User Reports & Testimonials
+
+I'd like to put together a small set of reports and testimonials from Puppet users who have implemented this module within their infrastructure.
+
+If you'd like to get involved, please reach out via email [craig@cwatson.org](mailto:craig@cwatson.org), Twitter [@craigwatson1987](https://twitter.com/craigwatson1987) or [Google+](https://plus.google.com/u/0/+CraigWatson1987).
+
 ####Table of Contents
 
 1. [Overview - What is the puppet-vmwaretools module?](#overview)
@@ -39,7 +45,7 @@ Upgrading of currently installed VMware Tools packages is also supported - the m
 ###Setup Requirements
 
 * Perl must be installed on the target systems in order to run the VMware Tools installer.
-* Pluginsync must be enabled, due to the vmwaretools custom fact distributed with this module.
+* Pluginsync must be enabled, due to the `vmwaretools_version` custom fact distributed with this module. If the module cannot access the fact, the Puppet run will fail.
 	
 ###Beginning with puppet-vmwaretools	
 
@@ -55,7 +61,7 @@ To specify a non-default version, working directory and HTTP URL (other variable
 
     class { 'vmwaretools':
       version     => '8.6.5-621624',
-      working_dir => '/tmp/vmwaretools'
+      working_dir => '/tmp/vmwaretools',
       archive_url => 'http://server.local/my/dir',
       archive_md5 => '9df56c317ecf466f954d91f6c5ce8a6f',
     }
@@ -91,3 +97,4 @@ To specify a non-default version, working directory and HTTP URL (other variable
 * VMware Tools fact by [janorn](https://github.com/janorn/puppet-vmwaretools)
 * Distributed under the terms of the GNU General Public License v3 - see LICENSE file for details.
 * Further contributions and testing reports are extremely welcome - please submit a pull request or issue on [GitHub](https://github.com/craigwatson/puppet-vmwaretools)
+* Testing environment kindly donated by [Sleek Networks Ltd (An Adapt Company)](http://www.sleek.net)

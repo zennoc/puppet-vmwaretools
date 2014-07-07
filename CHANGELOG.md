@@ -1,6 +1,99 @@
 CHANGELOG
 =========
 
+0.4.2
+-----
+
+TBC
+
+Bugifx release
+
+* vmwaretools::install::package -- Only installing build-essential on Debian - [pull request #43](https://github.com/craigwatson/puppet-vmwaretools/pull/43)
+
+0.4.1
+-----
+
+2014-06-20
+
+Bugfix release
+
+* vmwaretools                -- Deprecating config_creates override
+                             -- Documentation syntax correction - [pull request #42](https://github.com/craigwatson/puppet-vmwaretools/pull/42)
+                             -- Added check fof the vmwaretools_version fact - the module will hard-fail if this cannot be found
+* vmwaretools::params        -- Remvoing config_creates references
+* vmwaretools::config_tools  -- Replacing 'creates' paramter with a more straightforward 'unless' check using lsmod to check for the vmci kernel module that should be installed when vmware-config-tools.pl runs
+
+0.4.0
+-----
+
+2014-05-16
+
+Major functionality improvement
+
+* vmwaretools         -- Improving support for downloading VMware Tools via external Puppet modules (thanks to [Sam Keeley](https://github.com/keeleysam) and [Aedu](https://github.com/Aedu) for Pull Requests [#36](https://github.com/craigwatson/puppet-vmwaretools/pull/36) and [#37](https://github.com/craigwatson/puppet-vmwaretools/pull/37) respectively)
+* vmwaretools::params -- Adding Ubuntu 10.04 LTC (Lucid Lynx) override for config_creates_real variable
+
+0.3.1
+-----
+
+2014-04-14
+
+Bugfix release
+
+* vmwaretools::params -- Correcting typo in config_creates assignment
+
+0.3.0
+-----
+
+2014-04-14
+
+Major functionality improvement
+
+  * vmwaretools               -- Adding config_creates parameter to main class declaration
+  * vmwaretools::params       -- Renaming config_creates to config_creates_real
+                              -- Adding case statement for Ubuntu/Debian within the Debian osfamily case
+  * vmwaretools::config_tools -- Using vmwaretools::params::config_creates_real instead of vmwaretools::params::config_creates
+
+0.2.5
+-----
+
+2014-04-10
+
+Bugfix release
+
+  * vmwaretools -- Facter facts are strings, not literal booleans!
+
+0.2.4
+-----
+
+2014-04-09
+
+Bugfix release
+
+  * vmwaretools -- Fixing logic in init.pp to silently fail if the module is included on non-VMware hardware and the $fail_on_non_vmware parameter is not set to true (bug reported by Marcus Johansson by email - thanks!)
+
+0.2.3
+-----
+
+2014-04-07
+
+Bugfix release
+
+  * vmwaretools::install::package -- We now remove the vmware-tools-services package as well as open-vm-tools - [pull request #34](https://github.com/craigwatson/puppet-vmwaretools/pull/34) and packages are now purged rather than removed
+  * vmwaretools::params           -- $config_creates is now different across Debian and RedHat osfamilys - [pull request #34](https://github.com/craigwatson/puppet-vmwaretools/pull/34)
+
+
+0.2.2
+-----
+
+2014-03-05
+
+Bugfix release
+
+  * vmwaretools::install      -- Packages will now be purged/installed all the time, not just when we install VMware Tools -- raised by [cdenneen](https://github.com/cdenneen) in [bug #27](https://github.com/craigwatson/puppet-vmwaretools/issues/27)
+  * templates/download.sh.erb -- Added removal of the archive on an MD5 mismatch - raised by [herwigbogaert](https://github.com/herwigbogaert) in [bug #30](https://github.com/craigwatson/puppet-vmwaretools/issues/30)
+
+
 0.2.1
 -----
 
@@ -66,12 +159,12 @@ Adding major functionality improvements
 
 Bugfix release
 
-  vmwaretools::install::exec -- archive_location replaced by archive_url
-  vmwaretools                -- Parameter Typo fixed
+  * vmwaretools::install::exec -- archive_location replaced by archive_url
+  * vmwaretools                -- Parameter Typo fixed
 
 0.0.4
 -----
 
 2013-05-03
 
-Including new README format and starting Changelogs.
+  * Including new README format and starting Changelogs.
