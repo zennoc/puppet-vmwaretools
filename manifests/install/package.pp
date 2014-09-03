@@ -22,7 +22,7 @@
 #
 class vmwaretools::install::package {
 
-  package { ['open-vm-tools','open-vm-dkms', 'vmware-tools-services']:
+  package { $vmwaretools::params::purge_package_list:
     ensure => absent,
   }
 
@@ -70,8 +70,8 @@ class vmwaretools::install::package {
 
     'RedHat' : {
       if $vmwaretools::redhat_install_devel == true {
-        if ! defined(Package["kernel-devel-${::kernelrelease}"]) {
-          package{"kernel-devel-${::kernelrelease}":
+        if ! defined(Package[$vmwaretools::params::redhat_devel_package]) {
+          package{$vmwaretools::params::redhat_devel_package:
             ensure => present,
           }
         }
