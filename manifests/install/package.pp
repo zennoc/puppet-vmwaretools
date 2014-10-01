@@ -18,12 +18,12 @@
 # === Copyright:
 #
 # Copyright (C) 2012 Craig Watson
-# Published under the GNU General Public License v3
+# Published under the Apache License v2.0
 #
 class vmwaretools::install::package {
 
   package { $vmwaretools::params::purge_package_list:
-    ensure => absent,
+    ensure => purged,
   }
 
   if !defined(Package['perl']) {

@@ -86,7 +86,7 @@
 # === Copyright:
 #
 # Copyright (C) 2013 Craig Watson
-# Published under the GNU General Public License v3
+# Published under the Apache License v2.0
 #
 class vmwaretools (
   $version              = '9.0.0-782409',
@@ -100,12 +100,22 @@ class vmwaretools (
   $timesync             = undef,
 ) {
 
+  # Validate parameters where appropriate
+  validate_string($version)
+  validate_absolute_path($working_dir)
+  validate_bool($redhat_install_devel)
+  validate_string($archive_url)
+  validate_string($archive_md5)
+  validate_bool($fail_on_non_vmware)
+  validate_bool($keep_working_dir)
+  validate_bool($prevent_downgrade)
+
   # Puppet Lint gotcha -- facts are returned as strings, so we should ignore
   # the quoted-boolean warning here. Related links below:
   # https://tickets.puppetlabs.com/browse/FACT-151
   # https://projects.puppetlabs.com/issues/3704
 
-  if $::is_virtual == 'true' and $::virtual == 'vmware' and $::kernel == 'Linux' {
+  if $::is_virtual == true and $::virtual == 'vmware' and $::kernel == 'Linux' {
 
     if $::vmwaretools_version == undef {
       fail 'vmwaretools_version fact not present, please check your pluginsync configuraton.'
@@ -133,7 +143,7 @@ class vmwaretools (
     if $timesync != undef {
       include vmwaretools::timesync
     }
-  } elsif $fail_on_non_vmware == true and ($::is_virtual == 'false' or $::virtual != 'vmware') {
+  } elsif $fail_on_non_vmware == true and ($::is_virtual == false or $::virtual != 'vmware') {
     fail 'Not a VMware platform.'
   }
 }

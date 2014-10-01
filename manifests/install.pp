@@ -13,7 +13,7 @@
 # === Copyright:
 #
 # Copyright (C) 2013 Craig Watson
-# Published under the GNU General Public License v3
+# Published under the Apache License v2.0
 #
 class vmwaretools::install {
 
@@ -23,6 +23,7 @@ class vmwaretools::install {
     include vmwaretools::install::archive
     include vmwaretools::install::exec
 
+    Class['vmwaretools::install::package'] ->
     Class['vmwaretools::install::archive'] ->
     Class['vmwaretools::install::exec']
   }

@@ -1,12 +1,34 @@
 CHANGELOG
 =========
 
+1.0.0
+-----
+
+2014-09-24
+
+Major release
+
+* Module-wide changes -- This and all future versions of the module are now distributed under the Apache Licence v2.0! Previous versions are still licensed under the GNU General Public Licence v3.
+                      -- This module is now dependant on [PuppetLabs' stdlib module](https://github.come/puppetlabs/puppetlabs-stdlib). Please make sure this module is available within your Puppet codebase.
+
+* vmwaretools fact -- Fixes vmwaretools fact detection for failed tools installs - thanks [Markus Frosch](https://github.com/lazyfrosch) for [pull request #49](https://github.com/craigwatson/puppet-vmwaretools/pull/49)!
+* vmwaretools      -- open-vm-tools is now purged rather than just absent thanks [Markus Frosch](https://github.com/lazyfrosch) for [pull request #49](https://github.com/craigwatson/puppet-vmwaretools/pull/49)!
+
+0.4.3
+-----
+
+2014-09-08
+
+Bugfix release
+
+* vmwaretools -- We now only parse the module on Linux kernels, fixes [ticket #47](https://github.com/craigwatson/puppet-vmwaretools/pull/47), thanks to [thesysadm](https://github.com/thesysadm)!
+
 0.4.2
 -----
 
-TBC
+2014-08-06
 
-Bugifx release
+Bugfix release
 
 * vmwaretools::params           -- Adding new parameter for RH 5.x PAE/xen kernels for kernel-devel package (thanks Mark Stunnenberg!)
                                 -- Adding new parameter for the list of packages to purge
