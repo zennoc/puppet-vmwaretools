@@ -23,24 +23,30 @@ class vmwaretools::params {
     $deploy_files = true
   } else {
 
-    # If tools are installed, are we handling downgrades?
+    # If tools are installed, are we handling downgrades or upgrades?
     if $vmwaretools::prevent_downgrade {
 
-      if versioncmp($::vmwaretools_version,$vmwaretools::version) < 0 {
-        # Only deploy if the installed version is **lower than** the Puppet version
-        $deploy_files = true
-      } else {
+      if versioncmp($vmwaretools::version,$::vmwaretools_version) < 0 {
+        # Do not deploy if the Puppet version is lower than the installed version
         $deploy_files = false
       }
+    }
 
-    } else {
+    if $vmwaretools::prevent_upgrade {
 
-      # If we're not handling downgrades, deploy on version mismatch
+      if versioncmp($vmwaretools::version,$::vmwaretools_version) > 0 {
+        # Do not deploy if the Puppet version is higher than the installed version
+        $deploy_files = false
+      }
+    }
+
+    if $deploy_files == undef {
+
+      # If tools are installed and we're not preventing a downgrade or upgrade, deploy on version mismatch
       $deploy_files = $::vmwaretools_version ? {
         $vmwaretools::version => false,
         default               => true,
       }
-
     }
   }
 
@@ -48,6 +54,15 @@ class vmwaretools::params {
     'RedHat' => '/bin/awk',
     'Debian' => '/usr/bin/awk',
     default  => '/usr/bin/awk',
+  }
+
+  # Workaround for 'purge' bug on RH-based systems
+  # https://projects.puppetlabs.com/issues/2833
+  # https://projects.puppetlabs.com/issues/11450
+  # https://tickets.puppetlabs.com/browse/PUP-1198
+  $purge_package_ensure = $::osfamily ? {
+    'RedHat' => absent,
+    default  => purged,
   }
 
   if $::osfamily == 'RedHat' and $::lsbmajdistrelease == '5' {
@@ -64,5 +79,5 @@ class vmwaretools::params {
     $redhat_devel_package = "kernel-devel-${::kernelrelease}"
   }
 
-  $purge_package_list = ['open-vm-tools','open-vm-dkms', 'vmware-tools-services','open-vm-tools-desktop']
+  $purge_package_list = ['open-vm-tools', 'open-vm-dkms', 'vmware-tools-services', 'vmware-tools-foundation', 'open-vm-tools-desktop']
 }
